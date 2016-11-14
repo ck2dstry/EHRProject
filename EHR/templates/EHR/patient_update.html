@@ -1,0 +1,22 @@
+{% extends 'EHR/base.html' %}
+{% block content %}
+    <!-- Uncomment this to bring in other data from the model. The code fucking works, yay!
+    <div>
+        {% for patient in patients %}
+            {{ patient.patient_firstname }}<br>
+        {% endfor %}
+    </div>
+    -->
+    
+    <div class="page-header">
+      <h1>Update Patient</h1>
+    </div>
+    
+    <div>
+        <form method="POST">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    
+{% endblock %}

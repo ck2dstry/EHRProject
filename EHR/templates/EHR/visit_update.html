@@ -1,0 +1,60 @@
+{% extends 'EHR/base.html' %}
+{% block content %}
+
+<script language="javascript">
+    $('#myTabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+    
+    $('#myTabs a[href="#subjective"]').tab('show') // Select tab by name
+    $('#myTabs a:first').tab('show') // Select first tab
+    $('#myTabs a:last').tab('show') // Select last tab
+    $('#myTabs li:eq(2) a').tab('show') // Select third tab (0-indexed)
+</script>
+        
+    <div class="page-header">
+      <h1>Patient Visit</h1>
+    </div>
+
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#subjective" aria-controls="subjective" role="tab" data-toggle="tab">
+                    <h5>Subjective Findings</h5>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#objective" aria-controls="objective" role="tab" data-toggle="tab">
+                    <h5>Objective Findings</h5>
+                </a></li>
+            <li role="presentation">
+                <a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">
+                    <h5>Assessment</h5>
+                </a></li>
+            <li role="presentation">
+                <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">
+                    <h5>Plan</h5>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="subjective">
+                sfsadfsfsfsafasfsafsfasf
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="objective">
+                Objective text goes here!
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="assessment">
+                Differentials go here!
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="plan">
+                Plan goes here!
+            </div>
+        </div>
+        
+    </div>
+         
+{% endblock %}
