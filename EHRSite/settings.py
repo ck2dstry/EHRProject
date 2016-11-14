@@ -83,11 +83,18 @@ WSGI_APPLICATION = 'EHRSite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'petenguyenmusic_EHR_DB',
-        'USER': 'ehrsuperuser',
+        'NAME': 'sys',
+        'USER': 'root',
         'PASSWORD': 'rockstar314',
-        'HOST': 'petenguyenmusic.com',
+        'HOST': 'localhost',
         'PORT': '3306',
+#      
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'petenguyenmusic_EHR_DB',
+#        'USER': 'ehrsuperuser',
+#        'PASSWORD': 'rockstar314',
+#        'HOST': 'petenguyenmusic.com',
+#        'PORT': '3306',
     }
 }
 
