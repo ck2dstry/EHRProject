@@ -2,59 +2,629 @@
 {% block content %}
 
 <script language="javascript">
-    $('#myTabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-    })
-    
-    $('#myTabs a[href="#subjective"]').tab('show') // Select tab by name
-    $('#myTabs a:first').tab('show') // Select first tab
-    $('#myTabs a:last').tab('show') // Select last tab
-    $('#myTabs li:eq(2) a').tab('show') // Select third tab (0-indexed)
+     $('#myTabs a').click(function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+     })
+
+     $('#myTabs a[href="#subjective"]').tab('show') // Select tab by name
+     $('#myTabs a:first').tab('show') // Select first tab
+     $('#myTabs a:last').tab('show') // Select last tab
+     $('#myTabs li:eq(2) a').tab('show') // Select third tab (0-indexed)
 </script>
-        
-    <div class="page-header">
-      <h1>Patient Visit</h1>
-    </div>
 
-    <div class="col-md-12">
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#subjective" aria-controls="subjective" role="tab" data-toggle="tab">
-                    <h5>Subjective Findings</h5>
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="#objective" aria-controls="objective" role="tab" data-toggle="tab">
-                    <h5>Objective Findings</h5>
-                </a></li>
-            <li role="presentation">
-                <a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">
-                    <h5>Assessment</h5>
-                </a></li>
-            <li role="presentation">
-                <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">
-                    <h5>Plan</h5>
-                </a>
-            </li>
-        </ul>
+<script language="javascript">
+     function generateSOAP()
+     {
+          var allergies = document.form_subjective.field_allergies.value;
+          var patientname = document.form_subjective.field_patientname.value;
+          var patientage = document.form_subjective.field_patientage.value;
+          var patientsex = document.form_subjective.field_patientsex.value;
+          var chiefcomplaint = document.form_subjective.field_chiefcomplaint.value;
+          var onsetnumber = document.form_subjective.field_onset_number.value;
+          var onsetunit = document.form_subjective.field_onset_unit.value;
+          var paindescription = document.form_subjective.field_paindescription.value;
+          var painscale = document.form_subjective.field_painscale.value;
+          var context = document.form_subjective.field_context.value;
+          var progression = document.form_subjective.field_progression.value;
+          var makesbetter = document.form_subjective.field_makesbetter.value;
+          var makesworse = document.form_subjective.field_makesworse.value;
+          var mitigatingmeds = document.form_subjective.field_mitigatingmeds.value;
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="subjective">
-                sfsadfsfsfsafasfsafsfasf
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="objective">
-                Objective text goes here!
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="assessment">
-                Differentials go here!
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="plan">
-                Plan goes here!
-            </div>
-        </div>
-        
-    </div>
-         
+
+          /* SOAP note form logic goes here */
+
+
+          /* if patient's name is left blank, just call them Patient */
+          if (patientname.length > 0)
+          {
+               var patientname = patientname;
+          }
+          else
+          {
+               var patientname = "Patient"
+          }
+
+
+          /* allergy logic */
+          if (allergies.length > 0)
+          {
+               var allergies = "Patient has a known allergy to <b>" + allergies + "</b>. ";
+          }
+          else
+          {
+               var allergies = "Patient has no known allergies. ";
+          }
+
+
+          /* pain scale logic */
+          if (painscale.length > 0)
+          {
+               var painscale = ", with " + painscale + "/10 severity. ";
+          }
+          else
+          {
+               var painscale = ", of undetermined severity. ";
+          }
+
+
+          /* gender logic */
+          if (patientsex == 'male')
+          {
+               var pronoun = "He";
+          }
+          else if (patientsex == 'female')
+          {
+               var pronoun = "She"
+          }
+          else
+          {
+               var pronoun = "Patient"
+          }
+
+
+          /* pain description logic */
+          if (paindescription.length > 0)
+          {
+               var paindescription = pronoun + " states that it feels like " + paindescription + ". ";
+          }
+          else
+          {
+               var paindescription = "";
+          }
+
+
+          /* context logic */
+          if (context.length > 0)
+          {
+               context = pronoun + " was " + context + " when the symptoms began. ";
+          }
+          else
+          {
+               context = "";
+          }
+
+
+          /* logic for if symptoms got better or worse */
+          if (progression == 'worsened')
+          {
+               var progression = pronoun + " states that symptoms have gotten worse since the onset. ";
+          }
+          else if (progression == 'improved')
+          {
+               var progression = pronoun + " states that symptoms have improved since the onset. ";
+          }
+          else if (progression == 'same')
+          {
+               var progression = pronoun + " states that symptoms have remained the same since the onset. ";
+          }
+          else
+          {
+               var progression = "";
+          }
+
+
+          /* logic for meds help radio buttons */
+          if (document.getElementById('field_mitigatingmedshelpyes').checked)
+          {
+               var mitigatingmedshelp = ", which seemed to alleviate symptoms. ";
+          }
+          else if (document.getElementById('field_mitigatingmedshelpno').checked)
+          {
+               var mitigatingmedshelp = ", which did not seem to alleviate symptoms. ";
+          }
+          else
+          {
+               var mitigatingmedshelp = ".";
+          }
+
+
+          if (mitigatingmeds.length > 0)
+          {
+               var mitigatingmeds = pronoun + " has taken " + mitigatingmeds + mitigatingmedshelp;
+          }
+          else
+          {
+               var mitigatingmeds = pronoun + " has not taken any medications for this event. ";
+          }
+
+
+          if (makesbetter.length > 0)
+          {
+               var makesbetter = "Improving factors include " + makesbetter + ". ";
+          }
+          else
+          {
+               var makesbetter = "Nothing in particular improves the symptoms. "
+          }
+
+
+          if (makesworse.length > 0)
+          {
+               var makesworse = "Worsening factors include " + makesworse + ". ";
+          }
+          else
+          {
+               var makesworse = "Nothing in particular worsens the symptoms. ";
+          }
+
+
+          /* ROS section */
+
+          /* ROS: Consitutional */
+          if (document.getElementById('ros_const_normal').checked)
+          {
+               var ros_const_normal = "Patient denies fever, chills, weakness, and fatigue. ";
+          }
+          else
+          {
+               var ros_const_normal = "";
+          }
+
+          if (document.getElementById('ros_const_fever').checked)
+          {
+               var ros_const_fever = "fever";
+          }
+          else
+          {
+               var ros_const_fever = "";
+          }
+
+          if (document.getElementById('ros_const_chills').checked)
+          {
+               if (ros_const_fever.length > 0)
+               {
+                    var comma = ", ";
+               }
+               else
+               {
+                    var comma = "";
+               }
+               var ros_const_chills = comma + "chills";
+          }
+          else
+          {
+               var ros_const_chills = "";
+          }
+
+          if (document.getElementById('ros_const_weakness').checked)
+          {
+               if (ros_const_chills.length > 0 || ros_const_fever.length > 0)
+               {
+                    var comma = ", ";
+               }
+               else
+               {
+                    var comma = "";
+               }
+               var ros_const_weakness = comma + "weakness";
+          }
+          else
+          {
+               var ros_const_weakness = "";
+          }
+
+          if (document.getElementById('ros_const_fatigue').checked)
+          {
+               if (ros_const_weakness.length > 0 || ros_const_chills.length > 0 || ros_const_fever.length > 0)
+               {
+                    var comma = ", ";
+               }
+               else
+               {
+                    var comma = "";
+               }
+               var ros_const_fatigue = comma + "fatigue";
+          }
+          else
+          {
+               var ros_const_fatigue = "";
+          }
+
+          if (ros_const_normal.length > 0)
+          {
+               var ros_const = ros_const_normal;
+          }
+          else
+          {
+               var ros_const = "Patient reports " + ros_const_fever + ros_const_chills + ros_const_weakness + ros_const_fatigue + ". ";
+          }
+
+
+
+          /* Put all that shit together */
+
+          var SOAPstring = patientname + " is a " + patientage + " year old " + patientsex + " presenting with a chief complaint of " +
+               chiefcomplaint + ", onset " + onsetnumber + " " + onsetunit + " ago" + painscale + paindescription + context +
+               progression + mitigatingmeds + makesbetter + makesworse + "<br><br>" +
+               allergies + "<br><br>" +
+
+               "<h4>Review of Systems</h4>" +
+               "CONSTITUTIONAL: " + ros_const;
+
+          document.getElementById('generated_SOAPnote').innerHTML = SOAPstring;
+     }
+</script>
+
+     <div class="page-header">
+         <h1>Patient Visit</h1>
+     </div>
+
+<form name="form_subjective" class="form-horizontal">
+
+     <div class="col-md-12">
+          <ul class="nav nav-tabs" role="tablist">
+               <li role="presentation" class="active">
+                    <a href="#hpi" aria-controls="hpi" role="tab" data-toggle="tab">
+                         <h5>History of Present Illness</h5>
+                    </a>
+               </li>
+               <li role="presentation">
+                    <a href="#ros" aria-controls="ros" role="tab" data-toggle="tab">
+                         <h5>Review of Systems</h5>
+                    </a>
+               </li>
+               <li role="presentation">
+                    <a href="#objective" aria-controls="objective" role="tab" data-toggle="tab">
+                         <h5>Objective Findings</h5>
+                    </a>
+               </li>
+               <li role="presentation">
+                    <a href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">
+                         <h5>Assessment</h5>
+                    </a>
+               </li>
+               <li role="presentation">
+                    <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">
+                         <h5>Plan</h5>
+                    </a>
+               </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+               <div role="tabpanel" class="tab-pane fade in active" id="hpi">
+
+                    <h3>General Information</h3>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_patientname">Name:</label>
+                         <div class="col-sm-3">
+                              <input type="text" class="form-control" name="field_patientname" id="field_patientname" value="">
+                         </div>
+                         <label class="control-label col-sm-1" for="field_patientage">Age:</label>
+                         <div class="col-sm-2">
+                              <input type="text" class="form-control" name="field_patientage" size="3" id="field_patientage" value="">
+                         </div>
+                         <label class="control-label col-sm-1" for="field_patientsex">Sex:</label>
+                         <div class="col-sm-2">
+                              <select name="field_patientsex" class="form-control" id="field_patientsex">
+                                   <option selected value="">--</option>
+                                   <option value="male">M</option>
+                                   <option value="female">F</option>
+                              </select>
+                         </div>
+                    </div>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_allergies">Known allergies:</label>
+                         <div class="col-sm-4">
+                              <input type="text" class="form-control" name="field_allergies" id="field_allergies" value="" placeholder="e.g. penicillin">
+                         </div>
+                    </div>
+
+                    <hr>
+                    <h3>Chief Complaint / Onset</h3>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_chiefcomplaint">Chief Complaint:</label>
+                         <div class="col-sm-3">
+                              <input type="text" class="form-control" name="field_chiefcomplaint" id="field_chiefcomplaint" value="">
+                         </div>
+                         <label class="control-label col-sm-1" for="field_onset_number">Onset:</label>
+                         <div class="col-sm-2">
+                              <select name="field_onset_number" class="form-control" id="field_onset_number">
+                                   <option selected value="">--</option>
+                                   <option value="1">1</option>
+                                   <option value="2">2</option>
+                                   <option value="3">3</option>
+                                   <option value="4">4</option>
+                                   <option value="5">5</option>
+                                   <option value="6">6</option>
+                                   <option value="7">7</option>
+                                   <option value="8">8</option>
+                                   <option value="9">9</option>
+                                   <option value="10">10</option>
+                              </select>
+                         </div>
+                         <div class="col-sm-2">
+                              <select name="field_onset_unit" class="form-control" id="field_onset_unit">
+                                   <option selected value="">--</option>
+                                   <option value="hours">hours</option>
+                                   <option value="days">days</option>
+                                   <option value="weeks">weeks</option>
+                                   <option value="months">months</option>
+                                   <option value="years">years</option>
+                              </select>
+                         </div>
+                    </div>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_paindescription">Feels like:</label>
+                         <div class="col-sm-4">
+                              <input type="text" class="form-control" name="field_paindescription" id="field_paindescription" value="" placeholder="e.g. an elephant on my chest">
+                         </div>
+                         <label class="control-label col-sm-2" for="field_painscale">Pain Scale:</label>
+                         <div class="col-sm-2">
+                              <select name="field_painscale" class="form-control" id="field_painscale">
+                                   <option selected value="">--</option>
+                                   <option value="1">1</option>
+                                   <option value="2">2</option>
+                                   <option value="3">3</option>
+                                   <option value="4">4</option>
+                                   <option value="5">5</option>
+                                   <option value="6">6</option>
+                                   <option value="7">7</option>
+                                   <option value="8">8</option>
+                                   <option value="9">9</option>
+                                   <option value="10">10</option>
+                              </select>
+                         </div>
+                    </div>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_context">Onset Context:</label>
+                         <div class="col-sm-5">
+                              <input type="text" class="form-control" name="field_context" id="field_context" value="" placeholder="e.g. mowing the lawn">
+                         </div>
+                    </div>
+
+                    <hr>
+                    <h3>Progression</h3>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-7" for="field_progression">Worsened, improved, or stayed the same since onset?</label>
+                         <div class="col-sm-3">
+                              <select name="field_progression" class="form-control" id="field_progression">
+                                   <option selected value="">--</option>
+                                   <option value="worsened">Worsened</option>
+                                   <option value="improved">Improved</option>
+                                   <option value="same">Stayed the same</option>
+                              </select>
+                         </div>
+                    </div>
+
+                    <hr>
+                    <h3>Mitigating Factors</h3>
+
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_makesbetter">What makes it better?</label>
+                         <div class="col-sm-3">
+                              <input type="text" class="form-control" name="field_makesbetter" id="field_makesbetter" value="" placeholder="e.g. rest">
+                         </div>
+
+                         <label class="control-label col-sm-3" for="field_makesworse">What makes it worse?</label>
+                         <div class="col-sm-3">
+                              <input type="text" class="form-control" name="field_makesworse" id="field_makesworse" value="" placeholder="e.g. activity">
+                         </div>
+                    </div>
+                    <div class="form-group">
+                         <label class="control-label col-sm-3" for="field_mitigatingmeds">Medications taken for this event:</label>
+                         <div class="col-sm-4">
+                              <input type="text" class="form-control" name="field_mitigatingmeds" id="field_mitigatingmeds" value="" placeholder="e.g. ibuprofen, Tylenol">
+                         </div>
+
+                         <label class="control-label col-sm-3" for="field_mitigatingmedshelpyes">Did the medications help?</label>
+                         <div class="radio">
+                              <label>
+                                   <input type="radio" name="field_mitgatingmedshelp" id="field_mitigatingmedshelpyes" value="medshelpyes">
+                                   Yes
+                              </label>
+                              <label>
+                                   <input type="radio" name="field_mitgatingmedshelp" id="field_mitigatingmedshelpno" value="medshelpno">
+                                   No
+                              </label>
+                         </div>
+
+                    </div>
+
+                    <hr>
+                    <h3>Associated Symptoms</h3>
+
+                    <hr>
+                    <h3>Past Medical/Surgical History</h3>
+
+                    <hr>
+                    <h3>Social History</h3>
+
+                    <hr>
+                    <h3>Family Medical History</h3>
+
+               </div>
+
+
+               <div role="tabpanel" class="tab-pane fade" id="ros">
+                    <div class="col-sm-6">
+                         <div class="row">
+                              <h3>Constitutional</h3>
+                              <div class="col-sm-6">
+                                   <div class="checkbox">
+                                        <label>
+                                             <input type="checkbox" value="" name="ros_const_normal" id="ros_const_normal">
+                                             All normal
+                                        </label>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="row">
+                              <div class="col-sm-3">
+                                   <div class="checkbox">
+                                        <label>
+                                             <input type="checkbox" value="" name="ros_const_fever" id="ros_const_fever">
+                                             Fever
+                                        </label>
+                                   </div>
+
+                                   <div class="checkbox">
+                                        <label>
+                                             <input type="checkbox" value="" name="ros_const_chills" id="ros_const_chills">
+                                             Chills
+                                        </label>
+                                   </div>
+                              </div>
+                              <div class="col-sm-3">
+                                   <div class="checkbox">
+                                        <label>
+                                             <input type="checkbox" value="" name="ros_const_weakness" id="ros_const_weakness">
+                                             Weakness
+                                        </label>
+                                   </div>
+                                   <div class="checkbox">
+                                        <label>
+                                             <input type="checkbox" value="" name="ros_const_fatigue" id="ros_const_fatigue">
+                                             Fatigue
+                                        </label>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <hr>
+                         <h3>ENT</h3>
+
+                         <hr>
+                         <h3>Cardiovascular</h3>
+
+                         <hr>
+                         <h3>Endocrine</h3>
+
+                         <hr>
+                         <h3>Genitourinary</h3>
+
+                         <hr>
+                         <h3>Neurologic</h3>
+
+                         <hr>
+                         <h3>Hematological / Lymphatic</h3>
+
+                    </div>
+                    <div class="col-sm-6">
+                         <h3>Eyes</h3>
+
+                         <hr>
+                         <h3>Integumentary / Breast</h3>
+
+                         <hr>
+                         <h3>Pulmonary</h3>
+
+                         <hr>
+                         <h3>Gastrointestinal</h3>
+
+                         <hr>
+                         <h3>Musculoskeletal</h3>
+
+                         <hr>
+                         <h3>Psychiatric</h3>
+
+
+                    </div>
+               </div>
+               <div role="tabpanel" class="tab-pane fade" id="objective">
+                    <div class="col-sm-6">
+                         <h3>General</h3>
+
+                         <hr>
+                         <h3>ENT</h3>
+
+                         <hr>
+                         <h3>Lymph Nodes</h3>
+
+                         <hr>
+                         <h3>Lungs</h3>
+
+                         <hr>
+                         <h3>Breast</h3>
+
+                         <hr>
+                         <h3>Abdomen</h3>
+
+                         <hr>
+                         <h3>Rectal</h3>
+
+                         <hr>
+                         <h3>Musculoskeletal</h3>
+                    </div>
+                    <div class="col-sm-6">
+                         <h3>Eyes</h3>
+
+                         <hr>
+                         <h3>Neck</h3>
+
+                         <hr>
+                         <h3>Cardiovascular</h3>
+
+                         <hr>
+                         <h3>Skin</h3>
+
+                         <hr>
+                         <h3>Psychiatric</h3>
+
+                         <hr>
+                         <h3>Genitourinary</h3>
+
+                         <hr>
+                         <h3>Extremities</h3>
+
+                         <hr>
+                         <h3>Neurological</h3>
+                    </div>
+               </div>
+               <div role="tabpanel" class="tab-pane fade" id="assessment">
+                    Differentials go here!
+               </div>
+               <div role="tabpanel" class="tab-pane fade" id="plan">
+                    Plan goes here!
+               </div>
+          </div>
+
+          <hr>
+          <div class="col-sm-4">
+          </div>
+
+          <div class="form-group col-sm-4">
+               <button type="button" class="btn btn-primary btn-lg btn-block" onclick="generateSOAP()">Generate SOAP Note</button>
+          </div>
+
+          <div class="col-sm-4">
+          </div>
+
+          <div class="form-group col-sm-12">
+               <p>
+                    <blockquote>
+                         <span id="generated_SOAPnote"></span>
+                    </blockquote>
+               </p>
+          </div>
+     </div>
+</form>
+
 {% endblock %}
